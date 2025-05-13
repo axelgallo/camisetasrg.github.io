@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAMISETAS RÍO GALLEGOS</title>
+
+  <style>
+    .carrito-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .carrito-icono {
+      font-size: 24px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .carrito-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 30px;
+      background: white;
+      color: black;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+
+    .carrito-container:hover .carrito-dropdown {
+      display: block;
+    }
+
+    .item-carrito {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .item-carrito button {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #002147;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+
+    header .llogo {
+      display: flex;
+      gap: 15px;
+    }
+
+    header .llogo img {
+      height: 100px;
+    }
+
+    header input[type="text"] {
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      width: 200px;
+    }
+
+    .btn {
+      background: #ff6f00;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #e65c00;
+    }
+
+    .contenido {
+      display: flex;
+      padding: 20px;
+    }
+
+    .filtros {
+      width: 20%;
+      padding-right: 20px;
+    }
+
+    .filtros h3 {
+      margin-bottom: 10px;
+    }
+
+    .talle-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .talle-btn {
+      padding: 10px 15px;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .talle-btn:hover,
+    .talle-btn.active {
+      background: #ff6f00;
+      color: white;
+    }
+
+    .productos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .producto {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      width: 200px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .producto img {
+      border-radius: 5px;
+    }
+  </style>
+
+  <script>
+    const productos = [
+      { id: 1, nombre: "Camiseta River Titular 24-25 Version Jugador", precio: 70000, talles: ["M"], imagen: src="./img/River1.jpeg"},
+      { id: 2, nombre: "Camiseta River Titular 24-25 Version Jugador", precio: 70000, talles: ["M"], imagen: src="./img/River1.jpeg" },
+      { id: 3, nombre: "Camiseta River Titular 24-25 Version Jugador", precio: 70000, talles: ["L"], imagen: src="./img/River1.jpeg" },
+      { id: 4, nombre: "Camiseta River Titular 24-25 Version Jugador", precio: 70000, talles: ["XL"], imagen: src="./img/River1.jpeg" },
+      { id: 5, nombre: "Camiseta Boca Titular 25-26 Version Fan", precio: 60000, talles: ["M"], imagen: src="./img/Boca1.jpg" },
+      { id: 6, nombre: "Camiseta Boca Titular 25-26 Version Fan", precio: 60000, talles: ["L"], imagen: src="./img/Boca1.jpg" },
+      { id: 7, nombre: "Camiseta Boca Titular 25-26 Version Fan", precio: 60000, talles: ["XL"], imagen: src="./img/Boca1.jpg" },
+      { id: 8, nombre: "Camiseta Boca Titular 25-26 Version Fan", precio: 60000, talles: ["XXL"], imagen: src="./img/Boca1.jpg" },
+      { id: 9, nombre: "Camiseta Argentina 25-26 Version Fan", precio: 60000, talles: ["M"], imagen: src="./img/arg2.jpeg" },
+      { id: 10, nombre: "Camiseta Argentina 25-26 Version Fan", precio: 60000, talles: ["L"], imagen: src="./img/arg2.jpeg" },
+      
+    ];
+
+    let carrito = [];
+    let talleActivo = null;
+
+    const paginasPorId = {
+  1: "camisetariver.html",
+  2: "camisetariver.html",
+  3: "camisetariver.html",
+  4: "camisetariver.html",
+  5: "camisetaboca.html",
+  6: "camisetaboca.html",
+  7: "camisetaboca.html",
+  8: "camisetaboca.html",
+  9: "camisetaarg.html",
+  10: "camisetaarg.html",
+
+  // Agregá más pares ID: página según necesites
+};
+
+
+
+    function renderProductos(filtroTalle = null) {
+      const contenedor = document.getElementById("productos");
+      contenedor.innerHTML = "";
+      const filtrados = filtroTalle ? productos.filter(p => p.talles.includes(filtroTalle)) : productos;
+      filtrados.forEach(producto => {
+        const div = document.createElement("div");
+        div.className = "producto";
+        let imagenHTML = `<img src="${producto.imagen}" alt="${producto.nombre}" width="200">`;
+if (paginasPorId[producto.id]) {
+  imagenHTML = `<a href="${paginasPorId[producto.id]}">${imagenHTML}</a>`;
+}
+
+div.innerHTML = `
+  ${imagenHTML}<br>
+  <strong>${producto.nombre}</strong><br>
+  $${producto.precio.toLocaleString()}<br>
+  Talle: ${producto.talles.join(", ")}<br>
+  <button class="btn" onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
+`;
+
+        contenedor.appendChild(div);
+        
+
+
+
+
+      });
+    }
+
+    function actualizarCarrito() {
+      const lista = document.getElementById("lista-carrito");
+      lista.innerHTML = "";
+      if (carrito.length === 0) {
+        lista.innerHTML = "<em>Vacío</em>";
+        return;
+      }
+      carrito.forEach((p, index) => {
+        const div = document.createElement("div");
+        div.className = "item-carrito";
+        div.innerHTML = `
+          <span>${p.nombre}</span>
+          <button onclick="eliminarDelCarrito(${index})">×</button>
+        `;
+        lista.appendChild(div);
+      });
+    }
+
+    function agregarAlCarrito(id) {
+      const producto = productos.find(p => p.id === id);
+      carrito.push(producto);
+      actualizarCarrito(); // sin alert
+    }
+
+    function eliminarDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarCarrito();
+    }
+
+    function finalizarCompra() {
+      if (carrito.length === 0) return alert("El carrito está vacío");
+      let mensaje = "Buenas Tardes! Me interesan las siguientes camisetas:\n";
+      carrito.forEach(p => mensaje += `- ${p.nombre} ($${p.precio})\n`);
+      const numeroWhatsApp = "+5492966568109";
+      const url = `https://wa.me/${+5492966568109}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+    }
+
+    function buscarProducto() {
+      const query = document.getElementById("busqueda").value.toLowerCase();
+      const contenedor = document.getElementById("productos");
+      contenedor.innerHTML = "";
+      const resultados = productos.filter(p => p.nombre.toLowerCase().includes(query));
+      resultados.forEach(producto => {
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.innerHTML = `
+          <img src="${producto.imagen}" alt="${producto.nombre}" width="200"><br>
+          <strong>${producto.nombre}</strong><br>
+          $${producto.precio.toLocaleString()}<br>
+          Talles: ${producto.talles.join(", ")}<br>
+          <button class="btn" onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function filtrarPorTalle(talle) {
+      talleActivo = talle;
+      document.querySelectorAll('.talle-btn').forEach(btn => btn.classList.remove('active'));
+      if (talle !== null) {
+        document.getElementById(`btn-${talle}`).classList.add('active');
+      }
+      renderProductos(talle);
+    }
+
+    window.onload = () => renderProductos();
+  </script>
+</head>
+<body>
+  <header>
+    <div class="llogo">
+      <img src="./img/logo.png" alt="Logo">
+      <h1>CAMISETAS RÍO GALLEGOS</h1>
+      <img src="./img/logo.png" alt="Logo">
+    </div>
+    <div>
+      <input type="text" id="busqueda" placeholder="Buscar camiseta...">
+      <button class="btn" onclick="buscarProducto()">Buscar</button>
+      <button class="btn" onclick="finalizarCompra()">Finalizar compra</button>
+    </div>
+    <div class="carrito-container">
+      <span class="carrito-icono">🛒</span>
+      <div class="carrito-dropdown" id="carrito-dropdown">
+        <strong>Carrito:</strong>
+        <div id="lista-carrito"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="contenido">
+    <div class="filtros">
+      <h3>Filtrar por Talle</h3>
+      <div class="talle-btns">
+        <button class="talle-btn" id="btn-S" onclick="filtrarPorTalle('S')">S</button>
+        <button class="talle-btn" id="btn-M" onclick="filtrarPorTalle('M')">M</button>
+        <button class="talle-btn" id="btn-L" onclick="filtrarPorTalle('L')">L</button>
+        <button class="talle-btn" id="btn-XL" onclick="filtrarPorTalle('XL')">XL</button>
+        <button class="talle-btn" id="btn-XXL" onclick="filtrarPorTalle('XXL')">XXL</button>
+        <button class="talle-btn" onclick="filtrarPorTalle(null)">Todos</button>
+      </div>
+    </div>
+    <div class="productos" id="productos"></div>
+  </div>
+</body>
+</html>

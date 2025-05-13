@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Producto</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+    .product-gallery {
+      display: flex;
+      gap: 20px;
+    }
+    .thumbnails {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .thumbnails img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.3s;
+    }
+    .thumbnails img:hover {
+      border: 2px solid #007BFF;
+    }
+    .main-image img {
+      width: 400px;
+      height: auto;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="product-gallery">
+    <div class="thumbnails">
+      <img src="./imgarg/arg2.jpeg" alt="Miniatura 1" onclick="changeImage('./imgarg/arg2.jpeg')">
+      <img src="./imgarg/arg3.jpg" alt="Miniatura 2" onclick="changeImage('./imgarg/arg3.jpg')">
+      <img src="./imgarg/arg4.jpg" alt="Miniatura 3" onclick="changeImage('./imgarg/arg4.jpg')">
+      <img src="./imgarg/arg5.jpg" alt="Miniatura 4" onclick="changeImage('./imgarg/arg5.jpg')">
+    </div>
+    <div class="main-image">
+      <img id="mainImage" src="./imgarg/arg1.jpg" alt="Producto principal">
+    </div>
+  </div>
+
+  <script>
+    function changeImage(src) {
+      document.getElementById('mainImage').src = src;
+    }
+  </script>
+
+</body>
+</html>

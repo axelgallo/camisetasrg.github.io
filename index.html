@@ -162,52 +162,63 @@
     padding: 20px;
     gap: 20px;
   }
+  header .btn {
+  margin-top: 8px;
+}
+
 
   @media (max-width: 768px) {
-    header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
-    }
-
-    header .llogo {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    header .llogo img {
-      height: 80px;
-    }
-
-    header input[type="text"] {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .contenido {
-      flex-direction: column;
-      padding: 10px;
-    }
-
-    .filtros {
-      width: 100%;
-      padding-right: 0;
-    }
-
-    .productos {
-      justify-content: center;
-    }
-
-    .producto {
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .carrito-dropdown {
-      right: auto;
-      left: 0;
-    }
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
   }
+
+  header .llogo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header .llogo img {
+    height: 80px;
+  }
+
+  header input[type="text"] {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  header .btn {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .contenido {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .filtros {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .productos {
+    justify-content: center;
+  }
+
+  .producto {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .carrito-dropdown {
+    right: auto;
+    left: 0;
+  }
+}
+
   </style>
 
   <script>
